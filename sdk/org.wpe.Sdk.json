@@ -1,0 +1,373 @@
+{
+    "build-runtime": true,
+    "id": "org.wpe.Sdk",
+    "id-platform": "org.wpe.Platform",
+    "branch": "stable",
+    "runtime": "org.freedesktop.Platform",
+    "sdk": "org.freedesktop.Sdk",
+    "runtime-version": "19.08",
+    "build-runtime": true,
+    "sdk-extensions": [ "org.freedesktop.Sdk.Locale", "org.freedesktop.Sdk.Docs",
+                        "org.freedesktop.Sdk.Extension.rust-stable" ],
+    "inherit-extensions": [
+        "org.freedesktop.Platform.Icontheme",
+        "org.gtk.Gtk3theme"
+    ],
+    "inherit-sdk-extensions": [
+        "org.freedesktop.Sdk.Extension"
+    ],
+    "cleanup-commands": [ "/usr/libexec/freedesktop-post.sh" ],
+    "cleanup-platform-commands": [ "/usr/libexec/freedesktop-post.sh" ],
+
+    "build-options": {
+        "arch": {
+            "arm": {
+                "cflags": "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64",
+                "cppflags": "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64",
+                "cxxflags": "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+            },
+            "aarch64": {
+                "cflags": "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64",
+                "cppflags": "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64",
+                "cxxflags": "-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
+            }
+        }
+    },
+
+    "modules": [
+        {
+            "name": "cmake",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/Kitware/CMake/releases/download/v3.15.5/cmake-3.15.5.tar.gz",
+                    "sha256": "fbdd7cef15c0ced06bb13024bfda0ecc0dedbcaaaa6b8a5d368c75255243beb4"
+                },
+                {
+                    "type": "shell",
+                    "commands": [
+                        "echo 'list(INSERT CMAKE_SYSTEM_LIBRARY_PATH 0 \"%{libdir}\")' >>Modules/Platform/UnixPaths.cmake",
+                        "echo 'list(INSERT CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES 0 \"%{libdir}\")' >>Modules/Platform/UnixPaths.cmake"
+                    ]
+                }
+            ],
+            "buildsystem": "simple",
+            "build-commands": [
+                "./configure --prefix=${FLATPAK_DEST} --parallel=${FLATPAK_BUILDER_N_JOBS}",
+                "make -j${FLATPAK_BUILDER_N_JOBS}",
+                "make install"
+            ]
+        },
+        {
+            "name": "libdrm",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://dri.freedesktop.org/libdrm/libdrm-2.4.99.tar.bz2",
+                    "sha256": "4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e"
+                }
+            ],
+            "config-opts": [
+                "--enable-etnaviv-experimental-api"
+            ]
+        },
+        {
+            "name": "libva",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2",
+                    "sha256": "3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878"
+                }
+            ]
+        },
+        {
+            "name": "libva-utils",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.5.0/libva-utils-2.5.0.tar.bz2",
+                    "sha256": "9238c9d5110d60f935683390b8383fdac3507346384cd5f117a23c6db1d72a17"
+                }
+            ],
+            "config-opts": [
+                "--disable-tests"
+            ]
+        },
+        {
+            "name": "intel-vaapi-driver",
+            "only-arches": ["x86_64", "i386"],
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/intel/intel-vaapi-driver.git",
+                    "branch": "9bc30a0231e55f17afed50589669d11e844d0bb9"
+                }
+            ]
+        },
+        {
+            "name": "gstreamer",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.16.1.tar.xz",
+                    "sha256": "02211c3447c4daa55919c5c0f43a82a6fbb51740d57fc3af0639d46f1cf4377d"
+                }
+            ],
+            "config-opts": [
+                "-Dgtk_doc=disabled",
+                "-Dintrospection=disabled",
+                "-Dnls=disabled"
+            ]
+        },
+        {
+            "name": "gst-plugins-base",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.1.tar.xz",
+                    "sha256": "5c3cc489933d0597087c9bc6ba251c93693d64554bcc563539a084fa2d5fcb2b"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-base-0001-playbin-Handle-error-message-with-redirection-indica.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-base-0001-glupload-Add-VideoMetas-and-GLSyncMeta-to-the-raw-up.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-base-0001-gl-New-pushsrc-based-glbasesrc-base-class.patch"
+                }
+            ],
+            "config-opts": [
+                "-Dgtk_doc=disabled",
+                "-Dintrospection=disabled",
+                "-Dnls=disabled"
+            ]
+        },
+        {
+            "name": "gst-plugins-good",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.1.tar.xz",
+                    "sha256": "9fbabe69018fcec707df0b71150168776040cde6c1a26bb5a82a136755fa8f1f"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-good-qtdemux-Specify-REDIRECT-information-in-error-messag.patch"
+                }
+            ],
+            "config-opts": [
+                "-Dnls=disabled"
+            ]
+        },
+        {
+            "name": "libwpe",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_INSTALL_PREFIX=/usr"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://wpewebkit.org/releases/libwpe-1.4.0.tar.xz",
+                    "sha256": "e2d3494fc33fe946ad917fd6a3abd127462b91bba62ef8b35507e92f8ede4188"
+                }
+            ]
+        },
+        {
+            "name": "wpebackend-fdo",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_INSTALL_PREFIX=/usr"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://wpewebkit.org/releases/wpebackend-fdo-1.4.0.tar.xz",
+                    "sha256": "a919ca4a5bc445f9419a5b7f3781cfc98e5abcf5d7259eb1869f5ab20fd18baf"
+                }
+            ]
+        },
+        {
+            "name": "brotli",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/google/brotli/archive/v1.0.7.tar.gz",
+                    "sha256": "4c61bfb0faca87219ea587326c467b95acb25555b53d1a421ffa3c8a9296ee2c"
+                }
+            ],
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_INSTALL_PREFIX=/usr"
+            ]
+        },
+        {
+            "name": "woff2",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/google/woff2/archive/v1.0.2.tar.gz",
+                    "sha256": "add272bb09e6384a4833ffca4896350fdb16e0ca22df68c0384773c67a175594"
+                }
+            ],
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_INSTALL_PREFIX=/usr"
+            ]
+        },
+        {
+            "name": "wpewebkit",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://wpewebkit.org/releases/wpewebkit-2.26.1.tar.xz",
+                    "sha256": "d1ae85dffb5bfc106c5ac6d5e73a3dfe3cb2c1df1f18c16103e1dc744cd4ac14"
+                }
+            ],
+            "config-opts": [
+                "-DPORT=WPE",
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG",
+                "-DCMAKE_INSTALL_PREFIX=/usr",
+                "-DUSE_OPENJPEG=OFF"
+            ],
+            "build-options": {
+                "arch": {
+                    "arm": {
+                        "cflags": "-g1",
+                        "cxxflags": "-g1"
+                    },
+                    "aarch64": {
+                        "cflags": "-g1",
+                        "cxxflags": "-g1"
+                    }
+                }
+            }
+        },
+        {
+            "name": "rtmpdump",
+            "buildsystem": "simple",
+            /* FIXME: Make libdir truly generic, hardcoding the triplet here is bad... */
+            "build-commands": [
+                "make prefix=/usr libdir=/usr/lib/x86_64-linux-gnu CRYPTO=GNUTLS install"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://git.ffmpeg.org/rtmpdump.git",
+                    "branch": "c5f04a58fc2aeea6296ca7c44ee4734c18401aa3"
+                }
+            ]
+        },
+        {
+            "name": "gst-plugins-bad",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.1.tar.xz",
+                    "sha256": "56481c95339b8985af13bac19b18bc8da7118c2a7d9440ed70e7dcd799c2adb5"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-bad-0001-h264parse-Post-a-WARNING-when-data-is-broken.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-bad-0001-wpe-Fix-build-with-Werror-enabled.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-bad-0001-wpe-Port-for-WPEWebKit-2.25.x.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-bad-0001-wpe-Rewrite-wpesrc-as-a-glbasesrc-subclass.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-bad-0002-wpesrc-Implement-load-bytes-action-signal.patch"
+                }
+            ],
+            "config-opts": [
+                "-Dgtk_doc=disabled",
+                "-Dintrospection=disabled"
+            ]
+        },
+        {
+            "name": "gstreamer-vaapi",
+            "buildsystem": "meson",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.1.tar.xz",
+                    "sha256": "cb570f6f1e78cb364fbe3c4fb8751824ee9db0c942ba61b62380b9b5abb7603a"
+                }
+            ]
+        },
+        {
+            "name": "adwaita-icon-theme",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://ftp.gnome.org/pub/GNOME/sources/adwaita-icon-theme/3.34/adwaita-icon-theme-3.34.0.tar.xz",
+                    "sha256": "40b7e91f8263552b64d0f9beff33150291b086618ce498c71bf10035e48c7c7f"
+                }
+            ]
+        },
+        {
+            "name": "os-release",
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "os-release"
+                },
+                {
+                    "type": "file",
+                    "path": "issue"
+                },
+                {
+                    "type": "file",
+                    "path": "issue.net"
+                },
+                {
+                    "type": "file",
+                    "path": "org.wpe.Sdk.appdata.xml"
+                },
+                {
+                    "type": "file",
+                    "path": "org.wpe.Platform.appdata.xml"
+                },
+                {
+                    "type": "file",
+                    "path": "os-release-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        }
+    ]
+}
