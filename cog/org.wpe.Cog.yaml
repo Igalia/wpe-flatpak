@@ -1,0 +1,27 @@
+app-id: org.wpe.Cog
+branch: stable
+runtime: org.wpe.Platform
+runtime-version: "stable"
+sdk: org.wpe.Sdk
+command: cog
+finish-args:
+- --device=dri
+- --share=network
+- --share=ipc
+- --socket=x11
+- --socket=wayland
+- --socket=pulseaudio
+- --system-talk-name=org.freedesktop.GeoClue2
+- --system-talk-name=org.a11y.Bus
+- --socket=system-bus
+- --socket=session-bus
+- --filesystem=home
+- --talk-name=ca.desrt.dconf
+- --env=GST_VAAPI_ALL_DRIVERS=1
+modules:
+- name: cog
+  buildsystem: cmake-ninja
+  sources:
+  - type: archive
+    url: https://github.com/Igalia/cog/releases/download/v0.4.0/cog-0.4.0.tar.xz
+    sha256: e9c13a51232434b7340a419b1e6f59c40c582cd80c8e60bd9ec7de16c904fc03
