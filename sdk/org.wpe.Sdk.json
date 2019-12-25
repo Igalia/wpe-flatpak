@@ -10,6 +10,7 @@
     "sdk-extensions": [ "org.freedesktop.Sdk.Locale", "org.freedesktop.Sdk.Docs",
                         "org.freedesktop.Sdk.Extension.rust-stable" ],
     "inherit-extensions": [
+        "org.freedesktop.Platform.GL",
         "org.freedesktop.Platform.Icontheme",
         "org.gtk.Gtk3theme"
     ],
