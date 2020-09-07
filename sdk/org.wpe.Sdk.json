@@ -5,7 +5,7 @@
     "branch": "stable",
     "runtime": "org.freedesktop.Platform",
     "sdk": "org.freedesktop.Sdk",
-    "runtime-version": "19.08",
+    "runtime-version": "20.08",
     "build-runtime": true,
     "sdk-extensions": [ "org.freedesktop.Sdk.Locale", "org.freedesktop.Sdk.Docs",
                         "org.freedesktop.Sdk.Extension.rust-stable" ],
@@ -61,15 +61,13 @@
         },
         {
             "name": "libdrm",
+            "buildsystem": "meson",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://dri.freedesktop.org/libdrm/libdrm-2.4.99.tar.bz2",
-                    "sha256": "4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e"
+                    "url": "https://dri.freedesktop.org/libdrm/libdrm-2.4.102.tar.xz",
+                    "sha256": "8bcbf9336c28e393d76c1f16d7e79e394a7fce8a2e929d52d3ad7ad8525ba05b"
                 }
-            ],
-            "config-opts": [
-                "--enable-etnaviv-experimental-api"
             ]
         },
         {
@@ -77,8 +75,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2",
-                    "sha256": "3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878"
+                    "url": "https://github.com/intel/libva/releases/download/2.8.0/libva-2.8.0.tar.bz2",
+                    "sha256": "adbb1244d278908f89ccfcf254a442de6d71934565a492cb6f03caf2ed4d1ec3"
                 }
             ]
         },
@@ -87,8 +85,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/releases/download/2.5.0/libva-utils-2.5.0.tar.bz2",
-                    "sha256": "9238c9d5110d60f935683390b8383fdac3507346384cd5f117a23c6db1d72a17"
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.8.0/libva-utils-2.8.0.tar.bz2",
+                    "sha256": "8acad2c16bfef408643cf4de56c324345449f202e4a3a5b012a62a1d3af400ef"
                 }
             ],
             "config-opts": [
@@ -103,7 +101,7 @@
                 {
                     "type": "git",
                     "url": "https://github.com/intel/intel-vaapi-driver.git",
-                    "branch": "9bc30a0231e55f17afed50589669d11e844d0bb9"
+                    "branch": "9a1f0c64174f970a26380d4957583c71372fbb7c"
                 }
             ]
         },
@@ -129,8 +127,16 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.1.tar.xz",
-                    "sha256": "5c3cc489933d0597087c9bc6ba251c93693d64554bcc563539a084fa2d5fcb2b"
+                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.2.tar.xz",
+                    "sha256": "b13e73e2fe74a4166552f9577c3dcb24bed077021b9c7fa600d910ec6987816a"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-base-0001-glupload-Fix-fallback-from-direct-dmabuf-to-dmabuf-u.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "gstreamer-patches/gst-plugins-base-0001-oggstream-Workaround-for-broken-PAR-in-VP8-BOS.patch"
                 },
                 {
                     "type": "patch",
@@ -138,17 +144,16 @@
                 },
                 {
                     "type": "patch",
-                    "path": "gstreamer-patches/gst-plugins-base-0001-glupload-Add-VideoMetas-and-GLSyncMeta-to-the-raw-up.patch"
+                    "path": "gstreamer-patches/gst-plugins-base-0002-glupload-fix-segfault.patch"
                 },
                 {
                     "type": "patch",
-                    "path": "gstreamer-patches/gst-plugins-base-0001-gl-New-pushsrc-based-glbasesrc-base-class.patch"
+                    "path": "gstreamer-patches/gst-plugins-base-0003-glbasefilter-add-support-for-changing-the-display.patch"
                 }
             ],
             "config-opts": [
                 "-Dgtk_doc=disabled",
-                "-Dintrospection=disabled",
-                "-Dnls=disabled"
+                "-Dintrospection=disabled"
             ]
         },
         {
@@ -157,8 +162,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.1.tar.xz",
-                    "sha256": "9fbabe69018fcec707df0b71150168776040cde6c1a26bb5a82a136755fa8f1f"
+                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.2.tar.xz",
+                    "sha256": "40bb3bafda25c0b739c8fc36e48380fccf61c4d3f83747e97ac3f9b0171b1319"
                 },
                 {
                     "type": "patch",
@@ -198,8 +203,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/wpebackend-fdo-1.6.0.tar.xz",
-                    "sha256": "7f5bd7b9d8f97b1655f4dcd39fad92719d0fb3985b251da5802df13aaa09f567"
+                    "url": "https://wpewebkit.org/releases/wpebackend-fdo-1.6.1.tar.xz",
+                    "sha256": "740eee3327acfb462b8460519a219e30dc0a870326e88e2ddc4fe2c8de20b1c9"
                 }
             ]
         },
@@ -208,8 +213,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/google/brotli/archive/v1.0.7.tar.gz",
-                    "sha256": "4c61bfb0faca87219ea587326c467b95acb25555b53d1a421ffa3c8a9296ee2c"
+                    "url": "https://github.com/google/brotli/archive/v1.0.9.tar.gz",
+                    "sha256": "f9e8d81d0405ba66d181529af42a3354f838c939095ff99930da6aa9cdf6fe46"
                 }
             ],
             "buildsystem": "cmake-ninja",
@@ -244,8 +249,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/wpewebkit-2.28.0.tar.xz",
-                    "sha256": "a85cd3cb46206a4929a9562d53379a7e7e2ec1a3224b34e2dcf5da30bb906722"
+                    "url": "https://wpewebkit.org/releases/wpewebkit-2.28.4.tar.xz",
+                    "sha256": "785d83b99cd45cedb7c4f1f697db773a5a81eb0a42aeeafa3c623053f6fde87a"
                 }
             ],
             "config-opts": [
@@ -290,33 +295,18 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.1.tar.xz",
-                    "sha256": "56481c95339b8985af13bac19b18bc8da7118c2a7d9440ed70e7dcd799c2adb5"
+                    "url": "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.2.tar.xz",
+                    "sha256": "f1cb7aa2389569a5343661aae473f0a940a90b872001824bc47fa8072a041e74"
                 },
                 {
                     "type": "patch",
                     "path": "gstreamer-patches/gst-plugins-bad-0001-h264parse-Post-a-WARNING-when-data-is-broken.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "gstreamer-patches/gst-plugins-bad-0001-wpe-Fix-build-with-Werror-enabled.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "gstreamer-patches/gst-plugins-bad-0001-wpe-Port-for-WPEWebKit-2.25.x.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "gstreamer-patches/gst-plugins-bad-0001-wpe-Rewrite-wpesrc-as-a-glbasesrc-subclass.patch"
-                },
-                {
-                    "type": "patch",
-                    "path": "gstreamer-patches/gst-plugins-bad-0002-wpesrc-Implement-load-bytes-action-signal.patch"
                 }
             ],
             "config-opts": [
                 "-Dgtk_doc=disabled",
-                "-Dintrospection=disabled"
+                "-Dintrospection=disabled",
+                "-Dvulkan=disabled"
             ]
         },
         {
@@ -325,8 +315,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.1.tar.xz",
-                    "sha256": "cb570f6f1e78cb364fbe3c4fb8751824ee9db0c942ba61b62380b9b5abb7603a"
+                    "url": "https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.16.2.tar.xz",
+                    "sha256": "191de7b0ab64a85dd0875c990721e7be95518f60e2a9106beca162004ed7c601"
                 }
             ]
         },
