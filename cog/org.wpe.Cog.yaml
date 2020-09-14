@@ -23,5 +23,5 @@ modules:
   buildsystem: cmake-ninja
   sources:
   - type: archive
-    url: https://github.com/Igalia/cog/releases/download/v0.6.0/cog-0.6.0.tar.xz
-    sha256: 208f58e0533b269400875237a95e994c93da7234a29fd1c904e756b88963e35d
+    url: https://github.com/Igalia/cog/releases/download/v0.8.0/cog-0.8.0.tar.xz
+    sha256: 181b1f4963cdf264b8068460a64d14c92a627f7138ebecc0f36fce085f4e92dd

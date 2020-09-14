@@ -186,8 +186,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/libwpe-1.6.0.tar.xz",
-                    "sha256": "3587c6b8a807f4bb76b268ba74ca82c6b395b90235db41ad8252224456193c90"
+                    "url": "https://wpewebkit.org/releases/libwpe-1.8.0.tar.xz",
+                    "sha256": "a6f00a7d091cbd4db57fe7ee3b4c12c6350921d654ed79812800a26c888481d2"
                 }
             ]
         },
@@ -203,8 +203,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/wpebackend-fdo-1.6.1.tar.xz",
-                    "sha256": "740eee3327acfb462b8460519a219e30dc0a870326e88e2ddc4fe2c8de20b1c9"
+                    "url": "https://wpewebkit.org/releases/wpebackend-fdo-1.8.0.tar.xz",
+                    "sha256": "9652a99c75fe1c6eab0585b6395f4e104b2427e4d1f42969f1f77df29920d253"
                 }
             ]
         },
@@ -249,8 +249,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/wpewebkit-2.28.4.tar.xz",
-                    "sha256": "785d83b99cd45cedb7c4f1f697db773a5a81eb0a42aeeafa3c623053f6fde87a"
+                    "url": "https://wpewebkit.org/releases/wpewebkit-2.30.0.tar.xz",
+                    "sha256": "d1a99383ac3344195d09b4a4256c15dc5269c8585b3d836f43a057e60bb6f460"
                 }
             ],
             "config-opts": [
