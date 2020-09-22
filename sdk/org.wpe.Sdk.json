@@ -249,8 +249,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/wpewebkit-2.30.0.tar.xz",
-                    "sha256": "d1a99383ac3344195d09b4a4256c15dc5269c8585b3d836f43a057e60bb6f460"
+                    "url": "https://wpewebkit.org/releases/wpewebkit-2.30.1.tar.xz",
+                    "sha256": "78c0135d935b980fc64fbddf1fbaf441920edda4eeb4c16857ee8dc985650c25"
                 }
             ],
             "config-opts": [
