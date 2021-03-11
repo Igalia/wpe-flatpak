@@ -163,8 +163,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/libwpe-1.8.0.tar.xz",
-                    "sha256": "a6f00a7d091cbd4db57fe7ee3b4c12c6350921d654ed79812800a26c888481d2"
+                    "url": "https://wpewebkit.org/releases/libwpe-1.8.1.tar.xz",
+                    "sha256": "8adb4475be949ae4092370de6a37d7b9e1d3704cf4674867312e87de2ff0d880"
                 }
             ]
         },
@@ -226,8 +226,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://wpewebkit.org/releases/wpewebkit-2.30.1.tar.xz",
-                    "sha256": "78c0135d935b980fc64fbddf1fbaf441920edda4eeb4c16857ee8dc985650c25"
+                    "url": "https://wpewebkit.org/releases/wpewebkit-2.30.5.tar.xz",
+                    "sha256": "4b577f4f07c34bb5d453d62b7a41d9e937bd3a2827a92dcd6f47c35f27c8359a"
                 }
             ],
             "config-opts": [
